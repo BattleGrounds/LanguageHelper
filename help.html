@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Памятка по Паскалю</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Prism.js для подсветки синтаксиса Pascal -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css">
+    <style>
+        .search-highlight {
+            background-color: #ffeb3b;
+            padding: 2px 0;
+        }
+        .card {
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .code-block {
+            background-color: #1e1e1e;
+            border-radius: 4px;
+            margin: 1rem 0;
+            position: relative;
+        }
+        .code-block pre {
+            margin: 0;
+            border-radius: 4px;
+        }
+        .code-header {
+            background-color: #2d2d2d;
+            color: #ccc;
+            padding: 0.5rem 1rem;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+        .copy-btn:hover {
+            background-color: #3d3d3d;
+        }
+        .section-title {
+            border-bottom: 2px solid #3273dc;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: #7a7a7a;
+        }
+        .language-pascal {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        /* Кастомные стили для Pascal */
+        .token.keyword { color: #ff79c6; }
+        .token.string { color: #f1fa8c; }
+        .token.comment { color: #6272a4; font-style: italic; }
+        .token.function { color: #50fa7b; }
+        .token.operator { color: #ff79c6; }
+        .token.number { color: #bd93f9; max-width: 10px; height: 1rem; }
+        .token.punctuation { color: #f8f8f2; }
+        .token.constant { color: #bd93f9; }
+    </style>
+</head>
+<body>
+    <section class="hero is-primary is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">
+                    <i class="fas fa-code"></i> Памятка по Паскалю
+                </h1>
+                <p class="subtitle">
+                    Полное руководство по программированию на языке Pascal
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-3">
+                    <div class="box">
+                        <div class="field">
+                            <label class="label">Поиск по памятке</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" id="search-input" placeholder="Введите запрос...">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Категории</label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select id="category-filter">
+                                        <option value="all">Все категории</option>
+                                        <option value="compilation">Компиляция</option>
+                                        <option value="syntax">Синтаксис</option>
+                                        <option value="operators">Операторы</option>
+                                        <option value="structures">Структуры данных</option>
+                                        <option value="examples">Примеры</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <aside class="menu">
+                        <p class="menu-label">
+                            Навигация
+                        </p>
+                        <ul class="menu-list">
+                            <li><a href="#compilation">Компиляция</a></li>
+                            <li><a href="#syntax">Синтаксис</a></li>
+                            <li><a href="#operators">Операторы</a></li>
+                            <li><a href="#structures">Структуры данных</a></li>
+                            <li><a href="#examples">Примеры</a></li>
+                        </ul>
+                    </aside>
+                </div>
+                
+                <div class="column is-9">
+                    <div id="search-results-count" class="notification is-info is-light" style="display: none;">
+                        Найдено записей: <span id="results-count">0</span>
+                    </div>
+                    
+                    <div id="no-results" class="no-results">
+                        <i class="fas fa-search fa-3x mb-4"></i>
+                        <h3 class="title is-4">Ничего не найдено</h3>
+                        <p>Попробуйте изменить поисковый запрос или выбрать другую категорию</p>
+                    </div>
+                    
+                    <div class="content" id="content">
+                        <h2 id="compilation" class="section-title">Компиляция программ</h2>
+                        
+                        <div class="card" data-category="compilation">
+                            <div class="card-content">
+                                <p class="title is-5">Компиляция программы</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Командная строка</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-bash">fpc lab1/test.pas && lab1/test.exe</code></pre>
+                                </div>
+                                <p>Где <code>lab1</code> - папка с лабораторкой, <code>test</code> - название файла</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card" data-category="compilation">
+                            <div class="card-content">
+                                <p class="title is-5">Компиляция с отладочной информацией</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Командная строка</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-bash">fpc -gl lab1/test.pas</code></pre>
+                                </div>
+                                <p>Флаг <code>-gl</code> добавляет отладочную информацию для использования с отладчиком</p>
+                            </div>
+                        </div>
+                        
+                        <h2 id="syntax" class="section-title">Синтаксис языка</h2>
+                        
+                        <div class="card" data-category="syntax">
+                            <div class="card-content">
+                                <p class="title is-5">Структура программы</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Pascal</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-pascal">program ProgramName;
+
+{ Объявление переменных }
+var
+  x, y: integer;
+
+{ Основной блок программы }
+begin
+  x := 10;
+  y := 20;
+  writeln('Сумма: ', x + y);
+end.</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card" data-category="syntax">
+                            <div class="card-content">
+                                <p class="title is-5">Условные операторы</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Pascal</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-pascal">if условие then
+  оператор1
+else
+  оператор2;</code></pre>
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Pascal</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-pascal">case переменная of
+  значение1: оператор1;
+  значение2: оператор2;
+  else оператор_по_умолчанию;
+end;</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card" data-category="syntax">
+                            <div class="card-content">
+                                <p class="title is-5">Циклы</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Pascal</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-pascal">{ Цикл for }
+for i := 1 to 10 do
+  writeln(i);</code></pre>
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Pascal</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-pascal">{ Цикл while }
+while условие do
+  оператор;</code></pre>
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Pascal</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-pascal">{ Цикл repeat }
+repeat
+  оператор;
+until условие;</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h2 id="operators" class="section-title">Операторы</h2>
+                        
+                        <div class="card" data-category="operators">
+                            <div class="card-content">
+                                <p class="title is-5">Арифметические операторы</p>
+                                <div class="content">
+                                    <ul>
+                                        <li><code class="language-pascal">+</code> - сложение</li>
+                                        <li><code class="language-pascal">-</code> - вычитание</li>
+                                        <li><code class="language-pascal">*</code> - умножение</li>
+                                        <li><code class="language-pascal">/</code> - деление (вещественный результат)</li>
+                                        <li><code class="language-pascal">div</code> - целочисленное деление</li>
+                                        <li><code class="language-pascal">mod</code> - остаток от деления</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card" data-category="operators">
+                            <div class="card-content">
+                                <p class="title is-5">Операторы сравнения</p>
+                                <div class="content">
+                                    <ul>
+                                        <li><code class="language-pascal">=</code> - равно</li>
+                                        <li><code class="language-pascal"><></code> - не равно</li>
+                                        <li><code class="language-pascal"><</code> - меньше</li>
+                                        <li><code class="language-pascal">></code> - больше</li>
+                                        <li><code class="language-pascal"><=</code> - меньше или равно</li>
+                                        <li><code class="language-pascal">>=</code> - больше или равно</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card" data-category="operators">
+                            <div class="card-content">
+                                <p class="title is-5">Логические операторы</p>
+                                <div class="content">
+                                    <ul>
+                                        <li><code class="language-pascal">and</code> - логическое И</li>
+                                        <li><code class="language-pascal">or</code> - логическое ИЛИ</li>
+                                        <li><code class="language-pascal">not</code> - логическое НЕ</li>
+                                        <li><code class="language-pascal">xor</code> - исключающее ИЛИ</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h2 id="structures" class="section-title">Структуры данных</h2>
+                        
+                        <div class="card" data-category="structures">
+                            <div class="card-content">
+                                <p class="title is-5">Массивы</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Pascal</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-pascal">{ Одномерный массив }
+var
+  arr: array[1..10] of integer;
+
+{ Двумерный массив }
+var
+  matrix: array[1..5, 1..5] of real;</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card" data-category="structures">
+                            <div class="card-content">
+                                <p class="title is-5">Записи (структуры)</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Pascal</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-pascal">type
+  Student = record
+    name: string;
+    age: integer;
+    grade: real;
+  end;
+
+var
+  s: Student;
+begin
+  s.name := 'Иван';
+  s.age := 20;
+  s.grade := 4.5;
+end.</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h2 id="examples" class="section-title">Примеры программ</h2>
+                        
+                        <div class="card" data-category="examples">
+                            <div class="card-content">
+                                <p class="title is-5">Вычисление факториала</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Pascal</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-pascal">program Factorial;
+
+var
+  n, i, fact: integer;
+
+begin
+  write('Введите число: ');
+  readln(n);
+  fact := 1;
+  for i := 1 to n do
+    fact := fact * i;
+  writeln('Факториал ', n, ' = ', fact);
+end.</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card" data-category="examples">
+                            <div class="card-content">
+                                <p class="title is-5">Поиск максимального элемента в массиве</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>Pascal</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i> Копировать
+                                        </button>
+                                    </div>
+                                    <pre><code class="language-pascal">program FindMax;
+
+var
+  arr: array[1..10] of integer;
+  i, max: integer;
+
+begin
+  { Заполнение массива }
+  for i := 1 to 10 do
+    arr[i] := random(100);
+
+  { Поиск максимума }
+  max := arr[1];
+  for i := 2 to 10 do
+    if arr[i] > max then
+      max := arr[i];
+
+  writeln('Максимальный элемент: ', max);
+end.</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Памятка по Паскалю</strong> &copy; 2025
+            </p>
+        </div>
+    </footer>
+
+    <!-- Prism.js скрипты -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-pascal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const categoryFilter = document.getElementById('category-filter');
+            const cards = document.querySelectorAll('.card');
+            const noResults = document.getElementById('no-results');
+            const searchResultsCount = document.getElementById('search-results-count');
+            const resultsCount = document.getElementById('results-count');
+            
+            // Функция для копирования кода
+            window.copyCode = function(button) {
+                const codeBlock = button.closest('.code-block').querySelector('code');
+                const textArea = document.createElement('textarea');
+                textArea.value = codeBlock.textContent;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                // Визуальная обратная связь
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
+            };
+            
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedCategory = categoryFilter.value;
+                let visibleCards = 0;
+                
+                cards.forEach(card => {
+                    const cardText = card.textContent.toLowerCase();
+                    const cardCategory = card.getAttribute('data-category');
+                    
+                    const matchesSearch = searchTerm === '' || cardText.includes(searchTerm);
+                    const matchesCategory = selectedCategory === 'all' || cardCategory === selectedCategory;
+                    
+                    if (matchesSearch && matchesCategory) {
+                        card.style.display = 'block';
+                        visibleCards++;
+                        
+                        // Подсветка найденного текста
+                        if (searchTerm !== '') {
+                            highlightText(card, searchTerm);
+                        } else {
+                            removeHighlights(card);
+                        }
+                    } else {
+                        card.style.display = 'none';
+                        removeHighlights(card);
+                    }
+                });
+                
+                // Показываем/скрываем сообщение о результатах
+                if (visibleCards === 0) {
+                    noResults.style.display = 'block';
+                    searchResultsCount.style.display = 'none';
+                } else {
+                    noResults.style.display = 'none';
+                    searchResultsCount.style.display = 'block';
+                    resultsCount.textContent = visibleCards;
+                }
+                
+                // Показываем/скрываем заголовки разделов
+                updateSectionVisibility();
+            }
+            
+            function highlightText(element, searchTerm) {
+                removeHighlights(element);
+                
+                // Функция для рекурсивного обхода DOM и подсветки текста
+                function highlightNode(node) {
+                    if (node.nodeType === 3) { // Текстовый узел
+                        const text = node.nodeValue;
+                        const regex = new RegExp(`(${searchTerm})`, 'gi');
+                        const newText = text.replace(regex, '<span class="search-highlight">$1</span>');
+                        
+                        if (newText !== text) {
+                            const newSpan = document.createElement('span');
+                            newSpan.innerHTML = newText;
+                            node.parentNode.replaceChild(newSpan, node);
+                        }
+                    } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE' && 
+                              !node.classList.contains('code-block') && !node.classList.contains('token')) {
+                        // Элемент, который не является скриптом, стилем или кодом с подсветкой
+                        Array.from(node.childNodes).forEach(highlightNode);
+                    }
+                }
+                
+                highlightNode(element);
+            }
+            
+            function removeHighlights(element) {
+                const highlights = element.querySelectorAll('.search-highlight');
+                highlights.forEach(highlight => {
+                    const parent = highlight.parentNode;
+                    parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+                    parent.normalize();
+                });
+            }
+            
+            function updateSectionVisibility() {
+                const sections = document.querySelectorAll('.section-title');
+                sections.forEach(section => {
+                    const nextElement = section.nextElementSibling;
+                    let hasVisibleCards = false;
+                    
+                    // Проверяем, есть ли видимые карточки после заголовка
+                    let currentElement = nextElement;
+                    while (currentElement && !currentElement.classList.contains('section-title')) {
+                        if (currentElement.classList.contains('card') && currentElement.style.display !== 'none') {
+                            hasVisibleCards = true;
+                            break;
+                        }
+                        currentElement = currentElement.nextElementSibling;
+                    }
+                    
+                    // Показываем/скрываем заголовок в зависимости от наличия видимых карточек
+                    section.style.display = hasVisibleCards ? 'block' : 'none';
+                });
+            }
+            
+            // Обработчики событий
+            searchInput.addEventListener('input', performSearch);
+            categoryFilter.addEventListener('change', performSearch);
+            
+            // Инициализация
+            performSearch();
+            
+            // Переподсветка кода после поиска (если Prism перезаписал DOM)
+            setTimeout(() => {
+                Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+</html>
